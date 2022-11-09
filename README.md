@@ -1,3 +1,4 @@
+![example workflow](https://github.com/PharmaLedger-IMI/lpwa-test-automation/actions/workflows/test-pipeline.yml/badge.svg)
 ## Installation & Setup
 
 ### Step-1: Clone repository
