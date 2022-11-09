@@ -13,21 +13,23 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+    
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-      env:
-        SAUCE_USERNAME: ${{secrets.SAUCE_USERNAME}}
-        SAUCE_ACCESS_KEY: ${{secrets.SAUCE_ACCESS_KEY}}
-    - run: npm i
-    - run: npm run test.saucelabs.eu
+      # Setup Node version
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # install dependencies
+      - name: Install dependencies
+        run: npm run install
+      
+      - name: Trigger E2E tests
+        run: npm run test.saucelabs.eu
+        env:
+          SAUCE_USERNAME: ${{secrets.SAUCE_USERNAME}}
+          SAUCE_ACCESS_KEY: ${{secrets.SAUCE_ACCESS_KEY}}
