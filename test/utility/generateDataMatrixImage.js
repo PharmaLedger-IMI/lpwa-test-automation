@@ -3,10 +3,8 @@ const bwipjs = require('bwip-js');
 
 exports.generate2dDataMatrixImage = function (gtin, batchNumber, expiryDate, serialNumber) {
 
-
     let barcode = '(01)' + gtin + '(17)' + expiryDate + '(10)' + batchNumber;
-
-    console.log("barcode " + barcode)
+    console.log("constructed text for encoding:  " + barcode)
     bwipjs.toBuffer({
         bcid: 'gs1datamatrix',
         text: barcode,
@@ -14,19 +12,13 @@ exports.generate2dDataMatrixImage = function (gtin, batchNumber, expiryDate, ser
         padding: 135
     }, function (err, buff) {
         if (err) {
-
-            console.log("error", err)
-
+            console.log("Error while generating image: ", err)
         } else {
-
             fs.writeFileSync('test/data/test.png', buff)
             console.log("2D Data Matrix image generated !!")
-
         }
-
     });
     return barcode
-
 }
 
 

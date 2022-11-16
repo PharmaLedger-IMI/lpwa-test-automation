@@ -1,4 +1,6 @@
 ![example workflow](https://github.com/PharmaLedger-IMI/lpwa-test-automation/actions/workflows/test-pipeline.yml/badge.svg)
+
+This is a repository containing end-to-end test for the Lightweight Progressive Web App (LPWA) configured to the demo environment.
 ## Installation & Setup
 
 ### Step-1: Clone repository
@@ -26,7 +28,11 @@ Setup following env. variables in your local machine or in pipleine as secrets
  $ npm run generateImage
  ```
 
-### Step-4: Run tests
+### Step-4: Configure devices and OS versions (Optional)
+
+Setup device and OS version in `test/configs/wdio.saucelabs.conf.js` file. By default, it will run on Safari browser on iOS 15 & 16 on any iPhone mobile device, Chrome browser on Android 11 & 12 on any Samsung mobile device.
+
+### Step-5: Run tests
 Run following command to trigger end-to-end tests
  ```sh
  $ npm run test.saucelabs.eu

@@ -6,53 +6,42 @@ const {config} = require('./wdio.shared.conf');
 // See https://webdriver.io/docs/sauce-service.html for more information
 config.user = process.env.SAUCE_USERNAME;
 config.key = process.env.SAUCE_ACCESS_KEY;
-config.region = process.env.REGION || 'us';
+config.region = process.env.REGION || 'eu';
 
-// ===================================================================================
-// Capabilities
-// You can find more about constructing the capabilities for real device testing here
-// https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-//
-// All test configuration options and W3C compliant options can be found here
-// https://wiki.saucelabs.com/display/DOCS/Test+Configuration+Options
-//
-// To read more about W3C and Sauce Labs please check
-// https://wiki.saucelabs.com/display/DOCS/W3C+Capabilities+Support
-// ===================================================================================
-const _build = `image-injection-${new Date().getTime()}`
-const _name = 'image-injection'
-config.capabilities = [
-  /**
-   * Android
-   */
+const _build = `LPWA-Happy-Path-${new Date().toISOString()}`
+const _name = 'LPWA-Happy-Path'
+
+// Android capabilities
+config.capabilities = ['11','12'].map((androidVersion) => (
   {
     platformName: 'Android',
     'appium:browserName': 'Chrome',
-    'appium:deviceName': 'Google.*',
+    'appium:deviceName': 'Samsung.*',
     'appium:automationName': 'UiAutomator2',
-    'appium:platformVersion': '12',
+    'appium:platformVersion': androidVersion,
     'appium:autoGrantPermissions': true,
     'sauce:options': {
       build: _build,
       name: _name,
     }
-  },
-  /**
-   * iOS
-   */
-  {
+  })
+);
+
+// iOS capabilities
+iOSCapabilities = ['15','16'].map((iOSVersion) => ({
     platformName: 'iOS',
     browserName: 'Safari',
     'appium:deviceName': 'iPhone.*',
-    'appium:platformVersion': '16',
+    'appium:platformVersion': iOSVersion,
     'appium:automationName': 'XCUITest',
     'appium:autoAcceptAlerts': true,
     'sauce:options': {
       build: _build,
       name: _name,
     }
-  }
-];
+}))
+
+config.capabilities.push(...iOSCapabilities);
 
 config.services = config.services.concat('sauce');
 

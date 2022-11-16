@@ -1,22 +1,8 @@
 const fs = require('fs/promises')
+const expectedValues = require("../configs/expectations").expectations;
 
 describe('Compatibility Testing', () => {
-    // beforeEach(async () => {
-    //     await browser.url('');
-    //     try {
-    //         const eulaAcceptButton = $('body > div.page-container > div.terms-content-container > div > div > div.terms-button.agree')
-    //         await eulaAcceptButton.waitForDisplayed()
-    //         console.log(`Accepting EULA`)
-    //         await eulaAcceptButton.click()
-    //     } catch(err) {
-    //         console.log(`EULA not visible`)
-    //     }
-
-    //     await $('body > div.page-container > div.welcome-container > span').waitForDisplayed();
-    // });
-
     it('should run E2E tests on LPWA', async () => {
-
         await browser.url('');
         try {
             const eulaAcceptButton = $('body > div.page-container > div.terms-content-container > div > div > div.terms-button.agree')
@@ -86,41 +72,41 @@ describe('Compatibility Testing', () => {
         
         await browser.pause(1500);
         const title = await $('.product-name');
-        await expect(title).toHaveText('Exjade');
+        await expect(title).toHaveText(expectedValues.productName);
         const description = await $('.product-description');
-        await expect(description).toHaveText('Exjade');
+        await expect(description).toHaveText(expectedValues.productDescription);
         var firstSection = await $("div[id='leaflet-content'] div:nth-child(1) h5:nth-child(1)");
-        await expect(firstSection).toHaveText("Pharmaledger epi ambition");        
+        await expect(firstSection).toHaveText(expectedValues.sectionOneHeader);        
         var secondSection = await $("div[id='leaflet-content'] div:nth-child(2) h5:nth-child(1)");
-        await expect(secondSection).toHaveText("About pharmaledger");
+        await expect(secondSection).toHaveText(expectedValues.sectionTwoHeader);
         var thirdSection = await $("div[id='leaflet-content'] div:nth-child(3) h5:nth-child(1)");
-        await expect(thirdSection).toHaveText("General information");
+        await expect(thirdSection).toHaveText(expectedValues.sectionThreeHeader);
         var fourthSection = await $("div[id='leaflet-content'] div:nth-child(4) h5:nth-child(1)");
-        await expect(fourthSection).toHaveText("Contact pharmaledger");
+        await expect(fourthSection).toHaveText(expectedValues.sectionFourHeader);
         console.log("Checked for Leaflet Headers");
 
         await firstSection.click();
         const firstSectionContent = await $("div[class='leaflet-accordion-item active'] p:nth-child(1)");
-        await expect(firstSectionContent).toHaveTextContaining("review and approval");
+        await expect(firstSectionContent).toHaveTextContaining(expectedValues.sectionOneContent);
         console.log("Checked content by expanding 1st section");
         await firstSection.click();
 
 
         await secondSection.click();
         const secondSectionContent = await $("div[class='leaflet-accordion-item active'] li:nth-child(2)");
-        await expect(secondSectionContent).toHaveTextContaining("Project with the goal");
+        await expect(secondSectionContent).toHaveTextContaining(expectedValues.sectionTwoContent);
         console.log("Checked content by expanding 2nd section");
         await secondSection.click();
 
         await thirdSection.click();
         const thirdSectionContent = await $("div[class='leaflet-accordion-item active'] li:nth-child(3)");
-        await expect(thirdSectionContent).toHaveTextContaining("Datamatrix Code as the Digital key");
+        await expect(thirdSectionContent).toHaveTextContaining(expectedValues.sectionThreeContent);
         console.log("Checked content by expanding 3rd section");
         await thirdSection.click();
 
         await fourthSection.click();
         const fourthSectionContent = await $("div[class='leaflet-accordion-item active'] li:nth-child(1)");
-        await expect(fourthSectionContent).toHaveTextContaining("www.pharmaledger.eu");
+        await expect(fourthSectionContent).toHaveTextContaining(expectedValues.sectionFourContent);
         console.log("Checked content by expanding 4th section");
         await fourthSection.click();
         await browser.pause(1000);
