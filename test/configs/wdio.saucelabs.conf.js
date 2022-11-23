@@ -8,11 +8,11 @@ config.user = process.env.SAUCE_USERNAME;
 config.key = process.env.SAUCE_ACCESS_KEY;
 config.region = process.env.REGION || 'eu';
 
-const _build = `LPWA-Happy-Path-${new Date().toISOString()}`
-const _name = 'LPWA-Happy-Path'
+const _build = `LPWA-E2E-${new Date().toISOString()}`
+const _name = 'LPWA-E2E'
 
 // Android capabilities
-config.capabilities = ['11','12'].map((androidVersion) => (
+config.capabilities = ['10','11','12'].map((androidVersion) => (
   {
     platformName: 'Android',
     'appium:browserName': 'Chrome',
@@ -40,6 +40,20 @@ iOSCapabilities = ['15','16'].map((iOSVersion) => ({
       name: _name,
     }
 }))
+
+//Add capability for 4.7" device
+iOSCapabilities.push({
+  platformName: 'iOS',
+  browserName: 'Safari',
+  'appium:deviceName': 'iPhone_SE_2022_15_real',
+  'appium:platformVersion': '15.7',
+  'appium:automationName': 'XCUITest',
+  'appium:autoAcceptAlerts': true,
+  'sauce:options': {
+    build: _build,
+    name: _name,
+  }
+})
 
 config.capabilities.push(...iOSCapabilities);
 

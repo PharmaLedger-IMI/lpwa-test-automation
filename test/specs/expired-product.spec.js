@@ -1,8 +1,8 @@
 const fs = require('fs/promises')
 const expectedValues = require("../configs/expectations").expectations;
 
-describe('Compatibility Testing', () => {
-    it('should run E2E tests on LPWA', async () => {
+describe('Expired Product Scenario', () => {
+    it('should run expired product test on LPWA', async () => {
         await browser.url('');
         try {
             const eulaAcceptButton = $('body > div.page-container > div.terms-content-container > div > div > div.terms-button.agree')
@@ -17,8 +17,8 @@ describe('Compatibility Testing', () => {
 
         await $('body > div.page-container > div.scan-button-container > div').click()
 
-        // On Chrome 'autoGrantPermissions' does not work
-        // This branch will click the native elements that are needed to grant permissions
+        // // On Chrome 'autoGrantPermissions' does not work
+        // // This branch will click the native elements that are needed to grant permissions
         if(browser.capabilities.browserName === "Chrome") {
             console.log("Handling Permission Dialog on Android...")
             // Storing webcontext
@@ -34,7 +34,11 @@ describe('Compatibility Testing', () => {
             console.log('Permissions granted!')
 
             console.debug("Granting permissions duration...")
-            const permissionDurationSelector = 'android=new UiSelector().text("While using the app").className("android.widget.Button")'
+            let permissionDurationSelector = 'android=new UiSelector().text("While using the app").className("android.widget.Button")'
+            if(browser.capabilities.platformVersion === '10') {
+                console.debug(`Detected Android 10, using different selector for permissions duration...`)
+                permissionDurationSelector = 'android=new UiSelector().text("Allow").className("android.widget.Button")'
+            }
             await $(permissionDurationSelector).waitForExist()
             await $(permissionDurationSelector).click()
             console.log("Permissions duration granted!")
@@ -46,7 +50,7 @@ describe('Compatibility Testing', () => {
         await expect(browser).toHaveUrl('https://demo.pla.health/scan.html')
 
         console.log(`Loading & injecting image...`)
-        const testImage = await fs.readFile('./test/data/test.png', {encoding: 'base64'})
+        const testImage = await fs.readFile('./test/data/expired-product.png', {encoding: 'base64'})
 
         // Image injection
         browser.execute(`window.ImageCapture = class {
@@ -59,18 +63,11 @@ describe('Compatibility Testing', () => {
         await $('#settings-modal > div > div.page-content > div.loader').waitForExist()
         console.log(`Image scanned!`)
         
-        // // There might be a language missmatch
-        // try {
-        //     await $('#leaflet-lang-select').waitForDisplayed()
-        //     console.debug(`Language not available, selecting default...`)
-        //     await $('#leaflet-lang-select > div > div.modal-content > div.proceed-button.has-leaflets').click()
-        // } catch(err) {
-        //     console.debug(`Language available: ${err.message}!`)
-        // }
-
-        // await $('#expired-modal').waitForDisplayed()
-        
         await browser.pause(1500);
+        let expiryModal = await $('#expired-title');
+        await expect(expiryModal).toHaveText('Expired');
+        console.log("Found Expired Pop-up");
+        await $("#expired-modal > div > div.modal-header > div.close-modal").click();
         const title = await $('.product-name');
         await expect(title).toHaveText(expectedValues.productName);
         const description = await $('.product-description');

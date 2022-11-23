@@ -32,7 +32,10 @@ Setup following env. variables in your local machine or in pipleine as secrets
 
 Setup device and OS version in `test/configs/wdio.saucelabs.conf.js` file. By default, it will run on Safari browser on iOS 15 & 16 on any iPhone mobile device, Chrome browser on Android 11 & 12 on any Samsung mobile device.
 
-### Step-5: Run tests
+### Step-5: Point the test suite to required environment 
+
+By default, this framework points to Demo environment. It can be changed by modifying `baseUrl` property in `test/configs/wdio.shared.conf.js` file
+### Step-6: Run tests
 Run following command to trigger end-to-end tests
  ```sh
  $ npm run test.saucelabs.eu
