@@ -12,7 +12,7 @@ const _build = `LPWA-E2E-${new Date().toISOString()}`
 const _name = 'LPWA-E2E'
 
 // Android capabilities
-config.capabilities = ['10','11','12'].map((androidVersion) => (
+config.capabilities = ['7','10','11','12'].map((androidVersion) => (
   {
     platformName: 'Android',
     'appium:browserName': 'Chrome',

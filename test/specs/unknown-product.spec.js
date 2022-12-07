@@ -3,6 +3,7 @@ const expectedValues = require("../configs/expectations").expectations;
 
 describe('Unknown Product Scenario', () => {
     it('should run unknown product tests on LPWA', async () => {
+        console.debug("Executing Unknown Product Scenario...")
         await browser.url('');
         try {
             const eulaAcceptButton = $('body > div.page-container > div.terms-content-container > div > div > div.terms-button.agree')
@@ -34,10 +35,16 @@ describe('Unknown Product Scenario', () => {
             console.log('Permissions granted!')
 
             console.debug("Granting permissions duration...")
-            let permissionDurationSelector = 'android=new UiSelector().text("While using the app").className("android.widget.Button")'
+            let permissionDurationSelector = ''
             if(browser.capabilities.platformVersion === '10') {
                 console.debug(`Detected Android 10, using different selector for permissions duration...`)
                 permissionDurationSelector = 'android=new UiSelector().text("Allow").className("android.widget.Button")'
+            } else if (browser.capabilities.platformVersion === '7.0') {
+                console.debug(`Detected Android 7, using different selector for permissions duration...`)
+                permissionDurationSelector = 'android=new UiSelector().text("ALLOW").className("android.widget.Button")'
+            } else {
+                permissionDurationSelector = 'android=new UiSelector().text("While using the app").className("android.widget.Button")'
+
             }
             await $(permissionDurationSelector).waitForExist()
             await $(permissionDurationSelector).click()
